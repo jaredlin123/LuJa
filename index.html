@@ -2,169 +2,73 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8" />
-<title>澳門美食樂透抽籤（行程高度400px）</title>
+<title>澳門美食樂透抽籤（歷史可點＋行程高度400px）</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    font-family: "微軟正黑體", Helvetica, Arial, sans-serif;
-    margin: 0; padding: 0;
-    background: url('Xie-Qu.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #1c1c1c;
-    display: flex;
-    gap: 10px;
-    height: 100vh;
-    overflow: hidden;
-    flex-wrap: nowrap;
-    justify-content: center;
-    position: relative;
+  *{box-sizing:border-box;}
+  body{
+    font-family:"微軟正黑體",Helvetica,Arial,sans-serif;
+    margin:0;padding:0;
+    background:url('Xie-Qu.jpg') no-repeat center center fixed;
+    background-size:cover;
+    color:#1c1c1c;
+    display:flex;gap:10px;
+    height:100vh;overflow:hidden;
+    flex-wrap:nowrap;justify-content:center;
   }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(255,255,255,0.12);
-    z-index: 0;
-    pointer-events: none;
+  body::before{
+    content:"";position:fixed;inset:0;
+    background:rgba(255,255,255,0.12);
+    z-index:0;pointer-events:none;
   }
-  #history    { flex: 1 1 280px; min-width: 260px; }
-  #main       { flex: 1.6 1 360px; min-width: 320px; }
-  #all-restaurants { flex: 1 1 280px; min-width: 260px; }
-
-  #history, #main, #all-restaurants {
-    background: rgba(255,248,230,0.92);
-    padding: 16px 14px;
-    border-radius: 14px;
-    box-shadow: 0 8px 12px rgba(217,175,65,0.6),
-                inset 0 0 12px rgba(255,244,210,0.8);
-    border: 3px solid #d9ae41;
-    backdrop-filter: saturate(180%) blur(8px);
-    font-size: 16px;
-    font-weight: 600;
-    position: relative;
-    line-height: 1.5;
-    z-index: 1;
-    overflow: hidden;
+  #history{flex:1 1 280px;min-width:260px;display:flex;flex-direction:column;gap:14px;}
+  #main{flex:1.6 1 360px;min-width:320px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+  #all-restaurants{flex:1 1 280px;min-width:260px;}
+  #history,#main,#all-restaurants{
+    background:rgba(255,248,230,0.92);
+    padding:16px 14px;border-radius:14px;
+    box-shadow:0 8px 12px rgba(217,175,65,0.6),inset 0 0 12px rgba(255,244,210,0.8);
+    border:3px solid #d9ae41;backdrop-filter:saturate(180%) blur(8px);
+    font-size:16px;font-weight:600;position:relative;line-height:1.5;z-index:1;overflow:hidden;
   }
-  #history::before, #main::before, #all-restaurants::before {
-    content: "";
-    position: absolute;
-    top: 10px; left: 10px; right: 10px; bottom: 10px;
-    border: 2px solid #d6b84a;
-    border-radius: 12px;
-    pointer-events: none;
+  #history::before,#main::before,#all-restaurants::before{
+    content:"";position:absolute;top:10px;left:10px;right:10px;bottom:10px;
+    border:2px solid #d6b84a;border-radius:12px;pointer-events:none;
   }
-  #history {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+  .history-block{display:flex;flex-direction:column;}
+  #history-main,#history-dessert{max-height:260px;overflow-y:auto;margin-top:6px;}
+  .history-item{
+    background:#fffceb;border-radius:7px;padding:8px;margin-bottom:8px;
+    box-shadow:inset 0 0 6px rgba(217,175,65,0.35);
+    cursor:pointer;
   }
-  .history-block { display: flex; flex-direction: column; }
-  #history-main, #history-dessert {
-    max-height: 260px;
-    overflow-y: auto;
-    margin-top: 6px;
-  }
-  #main {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .button-row {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-  .button-row button { max-width: 160px; }
-  #result {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-height: 45vh;
-    width: 100%;
-  }
-  /* 今日行程高度改為 400px */
-  #itinerary {
-    margin-top: 10px;
-    height: 400px;
-    max-height: 400px;
-    overflow-y: auto;
-    border-radius: 14px;
-    background: rgba(255,248,230,0.95);
-    box-shadow: 0 6px 10px rgba(217,175,65,0.7), inset 0 0 12px rgba(255,244,210,0.85);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  #itinerary-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  #itinerary .history-item {
-    display: flex;
-    align-items: center;
-    background: #fffceb;
-    border-radius: 7px;
-    padding: 10px;
-    margin-bottom: 8px;
-    width: 90%;
-    max-width: 440px;
-    font-size: 16px;
-  }
-  #itinerary .info { flex: 1; text-align: center; margin-right: 10px; }
-  #itinerary .info strong { color: #916f02; font-size: 17px; }
-  #itinerary .history-item button {
-    background: #b28722;
-    border: none; border-radius: 6px; color: #fff;
-    padding: 6px 12px; cursor: pointer;
-    font-size: 14px;
-  }
-  #itinerary .history-item button:hover { background-color: #dbae3e; }
-
-  h1,h2 { color: #b47f18; text-shadow: 1px 1px 3px rgba(168,134,20,0.8); margin-bottom: 12px; }
-  button {
-    background: linear-gradient(135deg, #b28722, #dbae3e);
-    border: none;
-    padding: 10px 22px;
-    color: #fff8dc;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 22px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(181,135,34,0.6);
-  }
-  .result-card {
-    background: #fff5d9;
-    border-radius: 10px;
-    padding: 14px;
-    margin: 8px auto;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
-    box-shadow: 0 3px 8px rgba(208,169,47,0.7);
-  }
-  .address-link { color: #916f02; }
-  ul { list-style: none; padding-left: 8px; font-size: 16px; }
-  li { padding: 6px 0; border-bottom: 1px solid #d1b252; }
-
-  /* 正餐類保留滾動 */
-  #list-main { max-height: 440px; overflow-y: auto; }
-  /* 甜點類全展開 */
-  #list-dessert { max-height: none; overflow-y: visible; }
-
-  @media (max-width:640px) {
-    body { flex-wrap: wrap; overflow-y: auto; height: auto; }
-    #history,#main,#all-restaurants { width: 100%; min-width: unset; flex: none; }
-    #history-main, #history-dessert { max-height: 160px; }
-    #itinerary { height: 220px; max-height: 220px; }
+  .history-item:hover{background:#f9f0c5;}
+  .button-row{display:flex;justify-content:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .button-row button{max-width:160px;}
+  #result{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;max-height:45vh;width:100%;}
+  /* 今日行程高度改為400px */
+  #itinerary{margin-top:10px;height:400px;max-height:400px;overflow-y:auto;border-radius:14px;
+    background:rgba(255,248,230,0.95);
+    box-shadow:0 6px 10px rgba(217,175,65,0.7),inset 0 0 12px rgba(255,244,210,0.85);
+    width:100%;display:flex;flex-direction:column;align-items:center;}
+  #itinerary-list{width:100%;display:flex;flex-direction:column;align-items:center;}
+  #itinerary .history-item{display:flex;align-items:center;justify-content:space-between;width:90%;max-width:440px;}
+  #itinerary .info{text-align:center;flex:1;margin-right:10px;}
+  #itinerary .info strong{color:#916f02;font-size:17px;}
+  #itinerary .history-item button{background:#b28722;border:none;border-radius:6px;color:#fff;padding:6px 12px;cursor:pointer;font-size:14px;}
+  #itinerary .history-item button:hover{background-color:#dbae3e;}
+  h1,h2{color:#b47f18;text-shadow:1px 1px 3px rgba(168,134,20,0.8);margin-bottom:12px;}
+  button{background:linear-gradient(135deg,#b28722,#dbae3e);border:none;padding:10px 22px;color:#fff8dc;font-size:16px;font-weight:bold;border-radius:22px;cursor:pointer;box-shadow:0 4px 8px rgba(181,135,34,0.6);}
+  .result-card{background:#fff5d9;border-radius:10px;padding:14px;margin:8px auto;width:100%;max-width:380px;text-align:center;box-shadow:0 3px 8px rgba(208,169,47,0.7);}
+  .address-link{color:#916f02;}
+  ul{list-style:none;padding-left:8px;font-size:16px;}
+  li{padding:6px 0;border-bottom:1px solid #d1b252;}
+  #list-main{max-height:440px;overflow-y:auto;}
+  #list-dessert{max-height:none;overflow-y:visible;}
+  @media (max-width:640px){
+    body{flex-wrap:wrap;overflow-y:auto;height:auto;}
+    #history,#main,#all-restaurants{width:100%;min-width:unset;flex:none;}
+    #history-main,#history-dessert{max-height:160px;}
+    #itinerary{height:220px;max-height:220px;}
   }
 </style>
 </head>
@@ -204,9 +108,32 @@
 </div>
 
 <script>
-const restaurantsMain = [ /* 這裡放完整的正餐資料（省略）*/ ];
-const restaurantsDessert = [ /* 這裡放完整的甜點資料（省略）*/ ];
-let historyMain = [], historyDessert = [], itinerary = [];
+const restaurantsMain = [
+  {name:"陳光記燒臘店", dish:"黑椒燒鴨、燒鵝、三拼飯", time:"09:00–01:00", address:"澳門南灣羅保博士街19-39號萬勝大廈"},
+  {name:"雅馨緬甸餐廳", dish:"魚湯粉、馬拉盞雞絲撈麵", time:"08:00–19:30", address:"澳門新橋飛能便度街27號地下F座栢盧大廈"},
+  {name:"金利食店", dish:"咖哩雞米、雙汁雞腩米、咖哩牛腩", time:"07:00–16:45", address:"澳門雅廉訪大馬路85號C地下"},
+  {name:"德仔記燒味茶餐廳", dish:"掛爐燒鴨飯、西多士、叉燒", time:"07:00–21:00", address:"澳門氹仔南京街161號-177號太子花城地下B,C,D舖"},
+  {name:"新記美食", dish:"豬大腸、雞中翅、丸類", time:"07:00–23:30", address:"澳門馬場大馬路18號栢麗花園第一座及二座地下U鋪"},
+  {name:"彪記腸粉美食", dish:"香滑腸粉、鹹肉粽、福滿魚翅雞湯泡飯", time:"10:00–21:00", address:"澳門金碧坊一樓107號舖"}
+];
+const restaurantsDessert = [
+  {name:"喜蓮咖啡", dish:"乾炒牛肉粒飯、炸咖哩角、椰汁紅豆冰", time:"周一07:00–17:00；周二至日07:30–20:30", address:"澳門氹仔飛能便度街南龍花園地下B84號"},
+  {name:"新鴻發咖啡美食", dish:"法蘭西多士、西多士", time:"06:00–18:00", address:"澳門賈伯樂提督街55號富明樓A號"},
+  {name:"世紀咖啡", dish:"瓦煲咖啡、厚蛋鹹牛肉多士", time:"11:00–19:00 (周一休)", address:"澳門南灣湖景大馬路744F號湖景豪庭地下E號舖"},
+  {name:"Goat Bakers", dish:"奶酪花杯子、彩虹牛角麵包", time:"12:00–20:00", address:"澳門永聯台52號永聯大廈地舖"},
+  {name:"世記咖啡", dish:"瓦煲咖啡、香滑奶茶、豬扒包", time:"11:00–19:00 (周二休)", address:"澳門乾草圍15號"},
+  {name:"南屏雅敘", dish:"三文治、多士、蛋撻", time:"06:30起營業", address:"澳門大三巴牌坊附近"},
+  {name:"Inn Cafe", dish:"澳門特色小吃", time:"營業時間待確認", address:"澳門嘉樂庇總督大馬路822號"},
+  {name:"安琪兒咖啡及酒廊", dish:"咖啡、輕食", time:"07:30–23:00 (五六日到00:00)", address:"澳門葡京人酒店1樓L04舖"},
+  {name:"瑪嘉烈蛋塔店", dish:"葡式蛋塔", time:"平日08:30–16:30；假日10:00–18:00 (周三休)", address:"澳門馬統領圍66號"},
+  {name:"安德魯餅店", dish:"葡式蛋塔", time:"07:00–21:00", address:"澳門路環市區戴紳禮街1號"},
+  {name:"義順牛奶公司", dish:"雙皮燉奶、燉奶", time:"11:00–21:00", address:"澳門亞美打利庇盧大馬路381號"},
+  {name:"檸檬車露冰店", dish:"義大利手拉雪糕", time:"12:00–22:00", address:"澳門氹仔地堡街115號J鋪"},
+  {name:"禮記雪糕", dish:"紅豆冰、懷舊雪糕三文治", time:"12:00–19:00", address:"澳門荷蘭園大馬路12號地下"},
+  {name:"八目烘培 bamu bakery", dish:"葡式蛋塔、焦糖蛋塔", time:"10:00–19:00", address:"澳門果欄街25號德富大廈地下B舖"},
+  {name:"澤賢記雞蛋仔", dish:"葡撻雞蛋仔、多口味雞蛋仔", time:"10:30–21:00", address:"澳門安樂街13-15號"}
+];
+let historyMain=[],historyDessert=[],itinerary=[];
 
 function drawLottery(type){
   const pool = type==='main'?restaurantsMain:restaurantsDessert;
@@ -216,14 +143,12 @@ function drawLottery(type){
   const pick= avail[Math.floor(Math.random()*avail.length)];
   displayResult([pick]);
   list.unshift(pick); if(list.length>5) list.pop();
-  if(type==='main') historyMain=list; else historyDessert=list;
+  if(type==='main')historyMain=list;else historyDessert=list;
   updateHistory();
 }
 function drawBoth(){
-  const m=pickOne('main');
-  const d=pickOne('dessert');
-  displayResult([m,d]);
-  updateHistory();
+  const m=pickOne('main'), d=pickOne('dessert');
+  displayResult([m,d]); updateHistory();
 }
 function pickOne(type){
   const pool= type==='main'?restaurantsMain:restaurantsDessert;
@@ -243,12 +168,15 @@ function displayResult(picks){
       <p>🕒 ${p.time}</p>
       <p>📍 <a class="address-link" href="https://maps.google.com?q=${encodeURIComponent(p.address)}" target="_blank">${p.address}</a></p>
       <button onclick='addToItinerary(${JSON.stringify(p)})'>+ 加入行程</button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 function updateHistory(){
-  document.getElementById('history-main').innerHTML= historyMain.map(h=>`<div class="history-item">${h.name}</div>`).join('');
-  document.getElementById('history-dessert').innerHTML= historyDessert.map(h=>`<div class="history-item">${h.name}</div>`).join('');
+  document.getElementById('history-main').innerHTML= historyMain.map((h,i)=>`<div class="history-item" onclick="addToItineraryByHistory('main',${i})"><strong>${h.name}</strong><br>${h.dish}<br>${h.time}</div>`).join('');
+  document.getElementById('history-dessert').innerHTML= historyDessert.map((h,i)=>`<div class="history-item" onclick="addToItineraryByHistory('dessert',${i})"><strong>${h.name}</strong><br>${h.dish}<br>${h.time}</div>`).join('');
+}
+function addToItineraryByHistory(type,index){
+  const item = type==='main'? historyMain[index] : historyDessert[index];
+  addToItinerary(item);
 }
 function renderLists(){
   document.getElementById('list-main').innerHTML= restaurantsMain.map(r=>`<li>${r.name}</li>`).join('');
@@ -263,11 +191,9 @@ function removeFromItinerary(name){
 function updateItineraryUI(){
   document.getElementById('itinerary-list').innerHTML= itinerary.map((i,idx)=>`
     <div class="history-item">
-      <div class="info"><strong>${idx+1}. ${i.name}</strong><br>${i.dish}<br>
-      <a href="https://maps.google.com?q=${encodeURIComponent(i.address)}" target="_blank">${i.address}</a></div>
+      <div class="info"><strong>${idx+1}. ${i.name}</strong><br>${i.dish}<br><a href="https://maps.google.com?q=${encodeURIComponent(i.address)}" target="_blank">${i.address}</a></div>
       <button onclick="removeFromItinerary('${i.name}')">刪除</button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 renderLists();
 updateHistory();
