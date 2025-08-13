@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8" />
-<title>澳門美食樂透抽籤（全部高度1000px）</title>
+<title>澳門美食樂透抽籤（行程1000px＋歷史800px＋新增餐廳）</title>
 <style>
   *{box-sizing:border-box;}
   body{
@@ -35,10 +35,10 @@
     border:2px solid #d6b84a;border-radius:12px;pointer-events:none;
   }
   .history-block{display:flex;flex-direction:column;}
-  /* 正餐歷史、甜點歷史高度改為1000px */
+  /* 正餐歷史 & 甜點歷史高度 800px */
   #history-main,#history-dessert{
-    height:1000px;
-    max-height:1000px;
+    height:800px;
+    max-height:800px;
     overflow-y:auto;
     margin-top:6px;
   }
@@ -51,7 +51,7 @@
   .button-row{display:flex;justify-content:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
   .button-row button{max-width:160px;}
   #result{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;max-height:45vh;width:100%;}
-  /* 今日行程高度改為1000px */
+  /* 今日行程高度 1000px */
   #itinerary{
     margin-top:10px;height:1000px;max-height:1000px;overflow-y:auto;border-radius:14px;
     background:rgba(255,248,230,0.95);
@@ -115,14 +115,15 @@
 </div>
 
 <script>
-/* 正餐與甜點資料：已剔除重複與錯誤地址 */
 const restaurantsMain = [
   {name:"陳光記燒臘店", dish:"黑椒燒鴨、燒鵝、三拼飯", time:"09:00–01:00", address:"澳門南灣羅保博士街19-39號萬勝大廈"},
   {name:"雅馨緬甸餐廳", dish:"魚湯粉、馬拉盞雞絲撈麵", time:"08:00–19:30", address:"澳門新橋飛能便度街27號地下F座栢盧大廈"},
   {name:"金利食店", dish:"咖哩雞米、雙汁雞腩米、咖哩牛腩", time:"07:00–16:45", address:"澳門雅廉訪大馬路85號C地下"},
   {name:"德仔記燒味茶餐廳", dish:"掛爐燒鴨飯、西多士、叉燒", time:"07:00–21:00", address:"澳門氹仔南京街161號-177號太子花城地下B,C,D舖"},
   {name:"新記美食", dish:"豬大腸、雞中翅、丸類", time:"07:00–23:30", address:"澳門馬場大馬路18號栢麗花園第一座及二座地下U鋪"},
-  {name:"彪記腸粉美食", dish:"香滑腸粉、鹹肉粽、福滿魚翅雞湯泡飯", time:"10:00–21:00", address:"澳門金碧坊一樓107號舖"}
+  {name:"彪記腸粉美食", dish:"香滑腸粉、鹹肉粽、福滿魚翅雞湯泡飯", time:"10:00–21:00", address:"澳門金碧坊一樓107號舖"},
+  {name:"葉熾記勁秋美食之家", dish:"招牌豬扒包、免治牛肉通粉", time:"週一至週六07:00–18:00 (週日休)", address:"澳門南灣大馬路381號南華大廈地下"},
+  {name:"西灣安記", dish:"茶餐廳餐點", time:"每日06:30–18:00", address:"澳門新馬路大堂巷6號"}
 ];
 const restaurantsDessert = [
   {name:"喜蓮咖啡", dish:"乾炒牛肉粒飯、炸咖哩角、椰汁紅豆冰", time:"周一07:00–17:00；周二至日07:30–20:30", address:"澳門氹仔飛能便度街南龍花園地下B84號"},
@@ -139,11 +140,12 @@ const restaurantsDessert = [
   {name:"檸檬車露冰店", dish:"義大利手拉雪糕", time:"12:00–22:00", address:"澳門氹仔地堡街115號J鋪"},
   {name:"禮記雪糕", dish:"紅豆冰、懷舊雪糕三文治", time:"12:00–19:00", address:"澳門荷蘭園大馬路12號地下"},
   {name:"八目烘培 bamu bakery", dish:"葡式蛋塔、焦糖蛋塔", time:"10:00–19:00", address:"澳門果欄街25號德富大廈地下B舖"},
-  {name:"澤賢記雞蛋仔", dish:"葡撻雞蛋仔、多口味雞蛋仔", time:"10:30–21:00", address:"澳門安樂街13-15號"}
+  {name:"澤賢記雞蛋仔", dish:"葡撻雞蛋仔、多口味雞蛋仔", time:"10:30–21:00", address:"澳門安樂街13-15號"},
+  {name:"藝舍 ART HOUSE マカオお土産", dish:"原創藝術商品與澳門紀念品", time:"週一至週五10:30–18:00 (假日休)", address:"澳門南灣大馬路恒昌大廈63號1樓C座"},
+  {name:"金玉滿堂 (南灣店)", dish:"甜品及小食", time:"每日12:00–03:30", address:"澳門南灣大馬路5號龍圖閣地下"}
 ];
 let historyMain=[],historyDessert=[],itinerary=[];
 
-/* 功能函式略同前版 */
 function drawLottery(type){
   const pool = (type==='main'?restaurantsMain:restaurantsDessert);
   let list = type==='main'?historyMain:historyDessert;
