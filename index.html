@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8" />
-<title>澳門美食樂透抽籤（三欄橫向優化+完整餐廳資料）</title>
+<title>澳門美食樂透抽籤（手機橫向三欄＋甜點全展＋行程加高）</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -15,7 +15,7 @@
     gap: 10px;
     height: 100vh;
     overflow: hidden;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap; /* 預設不換行，橫向維持三欄 */
     justify-content: center;
     position: relative;
   }
@@ -88,9 +88,11 @@
     max-height: 45vh;
     width: 100%;
   }
+  /* 今日行程高度加大，可容納至少3筆餐廳 */
   #itinerary {
     margin-top: 10px;
-    height: 190px;
+    height: 300px;
+    max-height: 300px;
     overflow-y: auto;
     border-radius: 14px;
     background: rgba(255,248,230,0.95);
@@ -150,13 +152,18 @@
     box-shadow: 0 3px 8px rgba(208,169,47,0.7);
   }
   .address-link { color: #916f02; }
-  ul { list-style: none; padding-left: 8px; font-size: 16px; max-height: 440px; overflow-y: auto; }
+  ul { list-style: none; padding-left: 8px; font-size: 16px; }
   li { padding: 6px 0; border-bottom: 1px solid #d1b252; }
+  /* 保留正餐滾動 */
+  #list-main { max-height: 440px; overflow-y: auto; }
+  /* 甜點全展開 */
+  #list-dessert { max-height: none; overflow-y: visible; }
+
   @media (max-width:640px) {
     body { flex-wrap: wrap; overflow-y: auto; height: auto; }
     #history,#main,#all-restaurants { width: 100%; min-width: unset; flex: none; }
     #history-main, #history-dessert { max-height: 160px; }
-    #itinerary { height: 140px; }
+    #itinerary { height: 220px; max-height: 220px; }
   }
 </style>
 </head>
@@ -196,6 +203,7 @@
 </div>
 
 <script>
+/* 這裡放完整的正餐與甜點資料（同您前一版） */
 const restaurantsMain = [
   {name:"陳光記燒臘店", dish:"黑椒燒鴨、燒鵝、三拼飯", time:"09:00–01:00", address:"澳門南灣羅保博士街19-39號萬勝大廈"},
   {name:"雅馨緬甸餐廳", dish:"魚湯粉、馬拉盞雞絲撈麵", time:"08:00–19:30", address:"澳門新橋飛能便度街27號地下F座栢盧大廈"},
@@ -223,11 +231,11 @@ const restaurantsDessert = [
 ];
 let historyMain = [], historyDessert = [], itinerary = [];
 
-function drawLottery(type) {
+function drawLottery(type){
   const pool = type==='main'?restaurantsMain:restaurantsDessert;
-  let list = (type==='main')? historyMain : historyDessert;
+  let list=(type==='main')?historyMain:historyDessert;
   let avail= pool.filter(r=>!list.some(h=>h.name===r.name));
-  if(!avail.length){ list.length=0; avail = [...pool]; }
+  if(!avail.length){ list.length=0; avail=[...pool]; }
   const pick= avail[Math.floor(Math.random()*avail.length)];
   displayResult([pick]);
   list.unshift(pick); if(list.length>5) list.pop();
@@ -235,8 +243,8 @@ function drawLottery(type) {
   updateHistory();
 }
 function drawBoth(){
-  const m= pickOne('main');
-  const d= pickOne('dessert');
+  const m=pickOne('main');
+  const d=pickOne('dessert');
   displayResult([m,d]);
   updateHistory();
 }
@@ -244,14 +252,14 @@ function pickOne(type){
   const pool= type==='main'?restaurantsMain:restaurantsDessert;
   let list= type==='main'?historyMain:historyDessert;
   let avail= pool.filter(r=>!list.some(h=>h.name===r.name));
-  if(!avail.length){ list.length=0; avail=[...pool]; }
+  if(!avail.length){ list.length=0; avail=[...pool];}
   const pick= avail[Math.floor(Math.random()*avail.length)];
   list.unshift(pick); if(list.length>5) list.pop();
   if(type==='main') historyMain=list; else historyDessert=list;
   return pick;
 }
 function displayResult(picks){
-  document.getElementById('result').innerHTML = picks.map(p=>`
+  document.getElementById('result').innerHTML= picks.map(p=>`
     <div class="result-card">
       <h3>${p.name}</h3>
       <p>🍴 ${p.dish}</p>
@@ -262,21 +270,21 @@ function displayResult(picks){
   `).join('');
 }
 function updateHistory(){
-  document.getElementById('history-main').innerHTML = historyMain.map(h=>`<div class="history-item">${h.name}</div>`).join('');
-  document.getElementById('history-dessert').innerHTML = historyDessert.map(h=>`<div class="history-item">${h.name}</div>`).join('');
+  document.getElementById('history-main').innerHTML= historyMain.map(h=>`<div class="history-item">${h.name}</div>`).join('');
+  document.getElementById('history-dessert').innerHTML= historyDessert.map(h=>`<div class="history-item">${h.name}</div>`).join('');
 }
 function renderLists(){
-  document.getElementById('list-main').innerHTML = restaurantsMain.map(r=>`<li>${r.name}</li>`).join('');
-  document.getElementById('list-dessert').innerHTML = restaurantsDessert.map(r=>`<li>${r.name}</li>`).join('');
+  document.getElementById('list-main').innerHTML= restaurantsMain.map(r=>`<li>${r.name}</li>`).join('');
+  document.getElementById('list-dessert').innerHTML= restaurantsDessert.map(r=>`<li>${r.name}</li>`).join('');
 }
 function addToItinerary(p){
   if(!itinerary.some(i=>i.name===p.name)){ itinerary.push(p); updateItineraryUI(); }
 }
 function removeFromItinerary(name){
-  itinerary = itinerary.filter(i=>i.name!==name); updateItineraryUI();
+  itinerary= itinerary.filter(i=>i.name!==name); updateItineraryUI();
 }
 function updateItineraryUI(){
-  document.getElementById('itinerary-list').innerHTML = itinerary.map((i,idx)=>`
+  document.getElementById('itinerary-list').innerHTML= itinerary.map((i,idx)=>`
     <div class="history-item">
       <div class="info"><strong>${idx+1}. ${i.name}</strong><br>${i.dish}<br>
       <a href="https://maps.google.com?q=${encodeURIComponent(i.address)}" target="_blank">${i.address}</a></div>
