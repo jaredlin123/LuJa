@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8" />
-<title>澳門美食樂透抽籤（行程高度600px＋資料整理）</title>
+<title>澳門美食樂透抽籤（全部高度1000px）</title>
 <style>
   *{box-sizing:border-box;}
   body{
@@ -35,7 +35,13 @@
     border:2px solid #d6b84a;border-radius:12px;pointer-events:none;
   }
   .history-block{display:flex;flex-direction:column;}
-  #history-main,#history-dessert{max-height:260px;overflow-y:auto;margin-top:6px;}
+  /* 正餐歷史、甜點歷史高度改為1000px */
+  #history-main,#history-dessert{
+    height:1000px;
+    max-height:1000px;
+    overflow-y:auto;
+    margin-top:6px;
+  }
   .history-item{
     background:#fffceb;border-radius:7px;padding:8px;margin-bottom:8px;
     box-shadow:inset 0 0 6px rgba(217,175,65,0.35);
@@ -45,9 +51,9 @@
   .button-row{display:flex;justify-content:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
   .button-row button{max-width:160px;}
   #result{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;max-height:45vh;width:100%;}
-  /* 今日行程高度改為600px */
+  /* 今日行程高度改為1000px */
   #itinerary{
-    margin-top:10px;height:600px;max-height:600px;overflow-y:auto;border-radius:14px;
+    margin-top:10px;height:1000px;max-height:1000px;overflow-y:auto;border-radius:14px;
     background:rgba(255,248,230,0.95);
     box-shadow:0 6px 10px rgba(217,175,65,0.7),inset 0 0 12px rgba(255,244,210,0.85);
     width:100%;display:flex;flex-direction:column;align-items:center;}
@@ -68,7 +74,7 @@
   @media (max-width:640px){
     body{flex-wrap:wrap;overflow-y:auto;height:auto;}
     #history,#main,#all-restaurants{width:100%;min-width:unset;flex:none;}
-    #history-main,#history-dessert{max-height:160px;}
+    #history-main,#history-dessert{max-height:300px;height:auto;}
     #itinerary{height:300px;max-height:300px;}
   }
 </style>
@@ -109,6 +115,7 @@
 </div>
 
 <script>
+/* 正餐與甜點資料：已剔除重複與錯誤地址 */
 const restaurantsMain = [
   {name:"陳光記燒臘店", dish:"黑椒燒鴨、燒鵝、三拼飯", time:"09:00–01:00", address:"澳門南灣羅保博士街19-39號萬勝大廈"},
   {name:"雅馨緬甸餐廳", dish:"魚湯粉、馬拉盞雞絲撈麵", time:"08:00–19:30", address:"澳門新橋飛能便度街27號地下F座栢盧大廈"},
@@ -136,6 +143,7 @@ const restaurantsDessert = [
 ];
 let historyMain=[],historyDessert=[],itinerary=[];
 
+/* 功能函式略同前版 */
 function drawLottery(type){
   const pool = (type==='main'?restaurantsMain:restaurantsDessert);
   let list = type==='main'?historyMain:historyDessert;
